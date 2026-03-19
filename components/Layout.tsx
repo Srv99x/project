@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { MOCK_USER } from '../constants';
-import { Bell, Search } from 'lucide-react';
+import { Bell, Search, Menu, Trophy, TrendingUp, Trees, Sparkles } from 'lucide-react';
 import { User } from '../types';
 
 interface LayoutProps {
@@ -11,7 +11,16 @@ interface LayoutProps {
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [showNotifications, setShowNotifications] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  const topNavItems = [
+    { icon: Trophy, label: 'Achievements', path: '/achievements' },
+    { icon: TrendingUp, label: 'Leaderboard', path: '/leaderboard' },
+    { icon: Trees, label: 'Skill Tree', path: '/skill-tree' },
+    { icon: Sparkles, label: 'Shop', path: '/shop' },
+  ];
   
   // Load user from local storage to allow dynamic updates
   const [user, setUser] = useState<User>(() => {
@@ -50,22 +59,54 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   return (
-    <div className="min-h-screen bg-background text-white pl-64">
-      <Sidebar />
+    <div className={`min-h-screen bg-background text-white transition-all duration-300 ${sidebarOpen ? 'pl-64' : 'pl-20'}`}>
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
       {/* Header */}
       <header className="sticky top-0 z-40 bg-background/65 backdrop-blur-xl border-b border-primary/20 h-16 flex items-center justify-between px-8">
-        <div className="flex items-center glass-panel border border-primary/25 rounded-xl px-4 py-1.5 w-96 focus-within:border-primary/55 focus-within:shadow-[0_0_12px_rgba(176,122,76,0.16)] transition-all">
-          <Search size={16} className="text-subtext mr-3" />
-          <input 
-            type="text" 
-            placeholder="Search notes, code, or ask AI... (Press Enter)" 
-            className="bg-transparent border-none outline-none text-sm text-white w-full placeholder-subtext"
-            onKeyDown={handleSearch}
-          />
+        <div className="flex items-center gap-4">
+          {!sidebarOpen && (
+            <button 
+              onClick={() => setSidebarOpen(true)}
+              className="text-subtext hover:text-white transition-colors p-2 hover:bg-white/5 rounded-lg"
+              title="Expand sidebar"
+            >
+              <Menu size={20} />
+            </button>
+          )}
+          <div className="flex items-center glass-panel border border-primary/25 rounded-xl px-4 py-1.5 w-96 focus-within:border-primary/55 focus-within:shadow-[0_0_12px_rgba(176,122,76,0.16)] transition-all">
+            <Search size={16} className="text-subtext mr-3" />
+            <input 
+              type="text" 
+              placeholder="Search notes, code, or ask AI... (Press Enter)" 
+              className="bg-transparent border-none outline-none text-sm text-white w-full placeholder-subtext"
+              onKeyDown={handleSearch}
+            />
+          </div>
         </div>
 
         <div className="flex items-center gap-6">
+          <div className="hidden lg:flex items-center gap-3">
+            {topNavItems.map((item) => {
+              const isActive = location.pathname === item.path;
+              return (
+                <button
+                  key={item.path}
+                  onClick={() => navigate(item.path)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all group border ${
+                    isActive
+                      ? 'bg-white/10 text-primary border-primary/50 shadow-[0_0_12px_rgba(176,122,76,0.16)]'
+                      : 'bg-white/5 text-subtext border-white/10 hover:text-white hover:border-white/20 hover:bg-white/8'
+                  }`}
+                  title={item.label}
+                >
+                  <item.icon size={18} />
+                  <span className="text-sm font-medium">{item.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
           <div className="relative">
             <button 
                 onClick={toggleNotifications}

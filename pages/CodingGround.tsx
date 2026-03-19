@@ -154,10 +154,8 @@ export const CodingGround: React.FC = () => {
     });
 
     const workbenchRef = useRef<HTMLDivElement>(null);
-    const lineNumberRef = useRef<HTMLDivElement>(null);
     const terminalOutputRef = useRef<HTMLDivElement>(null);
     const editorTextareaRef = useRef<HTMLTextAreaElement | null>(null);
-    const isSyncingScrollRef = useRef(false);
 
     const prismLanguageMap: Record<Language, string> = {
         python: 'python',
@@ -175,7 +173,7 @@ export const CodingGround: React.FC = () => {
                 const content = line.length > 0 ? line : ' ';
                 const highlighted = Prism.highlight(content, grammar, prismLanguage);
                 const isActive = lineNumber === activeLine;
-                return `<span class="editor-line${isActive ? ' editor-line-active' : ''}" data-line="${lineNumber}">${highlighted}</span>`;
+                return `<div class="editor-line${isActive ? ' editor-line-active' : ''}" data-line="${lineNumber}" style="height: 24px; line-height: 24px; display: block;">${highlighted}</div>`;
             })
             .join('');
     };
@@ -272,16 +270,11 @@ export const CodingGround: React.FC = () => {
         textarea.wrap = 'off';
         textarea.style.overflow = 'auto';
         textarea.style.whiteSpace = 'pre';
-
-        const syncLineNumbersFromEditor = () => {
-            const gutter = lineNumberRef.current;
-            if (!gutter || isSyncingScrollRef.current) return;
-            isSyncingScrollRef.current = true;
-            gutter.scrollTop = textarea.scrollTop;
-            window.requestAnimationFrame(() => {
-                isSyncingScrollRef.current = false;
-            });
-        };
+        textarea.style.lineHeight = '24px';
+        textarea.style.fontSize = '13px';
+        textarea.style.padding = '16px';
+        textarea.style.margin = '0';
+        textarea.style.fontFamily = 'JetBrains Mono, monospace';
 
         const updateActiveLine = () => {
             const cursorPos = textarea.selectionStart || 0;
@@ -290,19 +283,16 @@ export const CodingGround: React.FC = () => {
         };
 
         updateActiveLine();
-        syncLineNumbersFromEditor();
         textarea.addEventListener('keyup', updateActiveLine);
         textarea.addEventListener('click', updateActiveLine);
         textarea.addEventListener('input', updateActiveLine);
         textarea.addEventListener('select', updateActiveLine);
-        textarea.addEventListener('scroll', syncLineNumbersFromEditor);
 
         return () => {
             textarea.removeEventListener('keyup', updateActiveLine);
             textarea.removeEventListener('click', updateActiveLine);
             textarea.removeEventListener('input', updateActiveLine);
             textarea.removeEventListener('select', updateActiveLine);
-            textarea.removeEventListener('scroll', syncLineNumbersFromEditor);
             if (editorTextareaRef.current === textarea) {
                 editorTextareaRef.current = null;
             }
@@ -414,54 +404,58 @@ export const CodingGround: React.FC = () => {
             className="flex flex-col h-full bg-[#0B0B0F] border border-white/10 rounded-sm overflow-hidden shadow-2xl relative transition-colors hover:border-primary/35"
             style={isDesktop ? { width: `min(100%, ${editorPaneWidth}%)` } : undefined}
         >
-            <div className="flex-1 flex overflow-hidden relative group">
-                {/* Line Numbers */}
-                <div
-                    ref={lineNumberRef}
-                    onScroll={(e) => {
-                        const textarea = editorTextareaRef.current;
-                        if (!textarea || isSyncingScrollRef.current) return;
-                        isSyncingScrollRef.current = true;
-                        textarea.scrollTop = e.currentTarget.scrollTop;
-                        window.requestAnimationFrame(() => {
-                            isSyncingScrollRef.current = false;
-                        });
-                    }}
-                    className="w-14 bg-[#141419] border-r border-white/5 text-subtext/50 text-right pr-3 pt-4 pb-4 text-[13px] font-mono leading-6 select-none overflow-y-auto custom-scrollbar"
-                >
-                    {lineNumbers.map(num => (
-                        <div
-                            key={num}
-                            className={`h-6 leading-6 ${num === activeLine ? 'text-primary bg-primary/10' : ''}`}
-                        >
-                            {num}
-                        </div>
-                    ))}
-                </div>
-                
-                {/* Textarea */}
-                <div className="flex-1 h-full overflow-hidden">
-                    <Editor
-                        value={code}
-                        onValueChange={handleCodeChange}
-                        highlight={highlightCode}
-                        padding={16}
-                        textareaId="coding-ground-editor"
-                        textareaClassName="editor-textarea"
-                        preClassName="editor-pre"
-                        className="h-full editor-root"
-                        spellCheck={false}
-                        tabSize={2}
-                        insertSpaces={true}
+            <div className="flex-1 flex overflow-hidden relative">
+                <div className="flex flex-1 overflow-hidden bg-[#0B0B0F]">
+                    {/* Line Numbers - Inside Editor */}
+                    <div
+                        className="bg-[#0B0B0F] text-subtext/50 text-right pr-4 text-[13px] font-mono select-none flex-shrink-0"
                         style={{
-                            fontFamily: 'JetBrains Mono, monospace',
-                            fontSize: 13,
+                            padding: '16px 8px',
                             lineHeight: '24px',
-                            height: '100%',
-                            minHeight: '100%',
-                            background: 'transparent',
+                            width: 'fit-content',
+                            minWidth: '3rem',
                         }}
-                    />
+                    >
+                        {lineNumbers.map(num => (
+                            <div
+                                key={num}
+                                className={`${num === activeLine ? 'text-primary' : ''}`}
+                                style={{
+                                    height: '24px',
+                                    lineHeight: '24px',
+                                    display: 'block',
+                                }}
+                            >
+                                {num}
+                            </div>
+                        ))}
+                    </div>
+                    
+                    {/* Textarea */}
+                    <div className="flex-1 overflow-hidden">
+                        <Editor
+                            value={code}
+                            onValueChange={handleCodeChange}
+                            highlight={highlightCode}
+                            padding={16}
+                            textareaId="coding-ground-editor"
+                            textareaClassName="editor-textarea"
+                            preClassName="editor-pre"
+                            className="editor-root"
+                            spellCheck={false}
+                            tabSize={2}
+                            insertSpaces={true}
+                            style={{
+                                fontFamily: 'JetBrains Mono, monospace',
+                                fontSize: 13,
+                                lineHeight: '24px',
+                                height: '100%',
+                                background: 'transparent',
+                                margin: 0,
+                                WebkitFontSmoothing: 'antialiased',
+                            }}
+                        />
+                    </div>
                 </div>
             </div>
             

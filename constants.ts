@@ -1,6 +1,6 @@
 import { User, UserRole, NotebookEntry } from './types';
 
-export const APP_NAME = "NeuroNex";
+export const APP_NAME = "EduVanta";
 
 export const MOCK_USER: User = {
   id: 'u_12345',
