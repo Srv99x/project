@@ -298,7 +298,16 @@ export const Dashboard: React.FC = () => {
   const BAR_COLORS = ['#4ADE80', '#F87171', '#FACC15', '#FB923C', '#22D3EE', '#A78BFA', '#60A5FA'];
 
   return (
-    <div className="space-y-4 h-[calc(100vh-130px)] flex flex-col justify-between overflow-hidden pb-2">
+    <div className="relative space-y-4 h-[calc(100vh-130px)] flex flex-col justify-between overflow-hidden pb-2">
+      <motion.div
+        className="page-character-art"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.35 }}
+        transition={{ duration: 1.5, delay: 0.6 }}
+      >
+        <img src="/dashboard-character.png" alt="" aria-hidden="true" />
+      </motion.div>
+
       {/* ── Header ── */}
       <div className="flex items-start justify-between flex-wrap gap-3">
         <div>

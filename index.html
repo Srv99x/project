@@ -256,6 +256,41 @@
     .token.variable {
       color: #d6deeb;
     }
+
+    /* Page character art decorative elements */
+    .page-character-art {
+      position: absolute;
+      bottom: 0;
+      right: 24px;
+      width: 320px;
+      pointer-events: none;
+      z-index: 0;
+      user-select: none;
+    }
+
+    .page-character-art img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* PvP variant – centred, wider */
+    .page-character-art-pvp {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 380px;
+      pointer-events: none;
+      z-index: 0;
+      user-select: none;
+    }
+
+    .page-character-art-pvp img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
   </style>
   <script>
     tailwind.config = {

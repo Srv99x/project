@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import Editor from 'react-simple-code-editor';
 import Prism from 'prismjs';
 import 'prismjs/components/prism-python';
@@ -391,7 +392,16 @@ export const CodingGround: React.FC = () => {
     }, []);
 
   return (
-    <div className="h-[calc(100vh-8rem)] flex flex-col gap-4">
+    <div className="relative h-[calc(100vh-8rem)] flex flex-col gap-4">
+      <motion.div
+        className="page-character-art"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.35 }}
+        transition={{ duration: 1.5, delay: 0.6 }}
+      >
+        <img src="/coding-character.png" alt="" aria-hidden="true" />
+      </motion.div>
+
       {/* Boss Fight HUD — rendered above the toolbar */}
       <BossFightHUD
         lastRunResult={bossFightResult}

@@ -160,7 +160,31 @@ export const PvpQuiz: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4 md:p-6 lg:p-8 min-h-[80vh] flex flex-col justify-center">
+    <div className="relative overflow-hidden max-w-4xl mx-auto p-4 md:p-6 lg:p-8 min-h-[80vh] flex flex-col justify-center">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5, delay: 0.6 }}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: '250px',
+          width: 'calc(100vw - 250px)',
+          height: '100vh',
+          zIndex: 0,
+          pointerEvents: 'none',
+          overflow: 'hidden',
+        }}
+      >
+        <img
+          src="/pvp-character.png"
+          alt=""
+          aria-hidden="true"
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', opacity: 0.25 }}
+        />
+      </motion.div>
+
+      <div className="relative z-10 flex-1 flex flex-col justify-center">
       <AnimatePresence mode="wait">
         
         {/* LOBBY SCREEN */}
@@ -168,7 +192,16 @@ export const PvpQuiz: React.FC = () => {
           <motion.div 
             key="lobby"
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}
-            className="bg-[#0e0e14] border border-[#2a2a3a] rounded-2xl p-8 shadow-[0_0_50px_rgba(0,0,0,0.5)] flex flex-col items-center text-center"
+          className="rounded-2xl p-8 flex flex-col items-center text-center"
+          style={{
+            background: 'rgba(22, 22, 30, 0.55)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            boxShadow: '0 0 50px rgba(0,0,0,0.5)',
+            position: 'relative',
+            zIndex: 1,
+          }}
           >
             <div className="w-16 h-16 bg-[#f5c842]/10 rounded-full flex items-center justify-center mb-6 border border-[#f5c842]/30">
               <Swords size={32} className="text-[#f5c842]" />
@@ -347,6 +380,7 @@ export const PvpQuiz: React.FC = () => {
           </motion.div>
         )}
       </AnimatePresence>
+      </div>
     </div>
   );
 };

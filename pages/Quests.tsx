@@ -67,47 +67,33 @@ const TABS: { id: TabId; label: string; codename: string; icon: React.ReactNode;
   { id: 'story',  label: 'Deep Cover Ops',         codename: 'SEC-OMEGA', icon: <Skull size={14} />,       accent: 'from-rose-500 to-red-700' },
 ];
 
-// ─── Accept button with radar ping ───────────────────────────────────────────
+// ─── Accept button ────────────────────────────────────────────────────────────
 
 const AcceptButton: React.FC<{ accepted: boolean; completed: boolean; onClick: () => void }> = ({
   accepted, completed, onClick,
 }) => (
-  <div className="relative inline-flex items-center justify-center">
-    {/* Radar ping rings */}
-    {!accepted && !completed && (
-      <>
-        {[0, 0.5, 1.0].map((delay) => (
-          <motion.span
-            key={delay}
-            className="absolute inset-0 rounded-lg border border-cyan-400 pointer-events-none"
-            initial={{ opacity: 0.6, scale: 1 }}
-            animate={{ opacity: 0, scale: 1.9 }}
-            transition={{ duration: 1.8, delay, repeat: Infinity, ease: 'easeOut' }}
-          />
-        ))}
-      </>
+  <motion.button
+    onClick={onClick}
+    disabled={completed}
+    whileHover={completed ? {} : { scale: 1.02, filter: 'brightness(1.15)' }}
+    whileTap={completed ? {} : { scale: 0.97 }}
+    transition={{ duration: 0.15, ease: 'easeOut' }}
+    className={`flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-lg border disabled:opacity-50 disabled:cursor-not-allowed ${
+      completed
+        ? 'border-emerald-500/50 bg-emerald-500/10 text-emerald-400'
+        : accepted
+        ? 'border-violet-500/60 bg-violet-500/10 text-violet-300'
+        : 'border-cyan-400/60 bg-cyan-500/10 text-cyan-300 shadow-[0_0_14px_rgba(6,182,212,0.35)]'
+    }`}
+  >
+    {completed ? (
+      <><CheckCircle2 size={13} /> Extracted</>
+    ) : accepted ? (
+      <><Zap size={13} /> Claim Reward</>
+    ) : (
+      <><Crosshair size={13} /> Accept Mission</>
     )}
-
-    <button
-      onClick={onClick}
-      disabled={completed}
-      className={`relative z-10 flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-lg border transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
-        completed
-          ? 'border-emerald-500/50 bg-emerald-500/10 text-emerald-400'
-          : accepted
-          ? 'border-violet-500/60 bg-violet-500/10 text-violet-300 hover:bg-violet-500/20'
-          : 'border-cyan-400/60 bg-cyan-500/10 text-cyan-300 hover:bg-cyan-500/20 shadow-[0_0_14px_rgba(6,182,212,0.35)]'
-      }`}
-    >
-      {completed ? (
-        <><CheckCircle2 size={13} /> Extracted</>
-      ) : accepted ? (
-        <><Zap size={13} /> Claim Reward</>
-      ) : (
-        <><Crosshair size={13} /> Accept Mission</>
-      )}
-    </button>
-  </div>
+  </motion.button>
 );
 
 // ─── Single mission card ──────────────────────────────────────────────────────
@@ -149,6 +135,11 @@ const MissionCard: React.FC<MissionCardProps> = ({
             : accepted
             ? '0 0 20px rgba(139,92,246,0.08)'
             : '0 4px 24px rgba(0,0,0,0.4)',
+          background: 'rgba(22, 22, 30, 0.60)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          position: 'relative',
+          zIndex: 1,
         }}
       >
         {/* Top accent bar */}
@@ -344,7 +335,36 @@ export const Quests: React.FC = () => {
   const activeTab = TABS.find((t) => t.id === selectedTab)!;
 
   return (
-    <div className="space-y-6">
+    <div className="relative space-y-6" style={{ zIndex: 1 }}>
+      <motion.div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: '250px',
+          width: 'calc(100vw - 250px)',
+          height: '100vh',
+          zIndex: 0,
+          pointerEvents: 'none',
+          overflow: 'hidden',
+        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5, delay: 0.3 }}
+      >
+        <img
+          src="/quests-character.png"
+          alt=""
+          aria-hidden="true"
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: 'right center',
+            opacity: 0.18,
+          }}
+        />
+      </motion.div>
+
       {/* ── Header ── */}
       <div className="flex items-start justify-between flex-wrap gap-3">
         <div>

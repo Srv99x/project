@@ -18,9 +18,39 @@ export const BattlePass: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto p-4 md:p-6 lg:p-8">
+    <div className="relative space-y-6 max-w-5xl mx-auto p-4 md:p-6 lg:p-8" style={{ zIndex: 1 }}>
+      <motion.div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: '250px',
+          width: 'calc(100vw - 250px)',
+          height: '100vh',
+          zIndex: 0,
+          pointerEvents: 'none',
+          overflow: 'hidden',
+        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5, delay: 0.3 }}
+      >
+        <img
+          src="/battlepass-character.png"
+          alt=""
+          aria-hidden="true"
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: 'center 30%',
+            opacity: 0.20,
+          }}
+        />
+      </motion.div>
+
       {/* Header */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-6 bg-[#16161e] border border-[#2a2a3a] rounded-2xl p-6 md:p-8">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-6 bg-[#16161e] border border-[#2a2a3a] rounded-2xl p-6 md:p-8"
+           style={{ background: 'rgba(22, 22, 30, 0.60)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', position: 'relative', zIndex: 1 }}>
         <div>
           <h1 className="text-3xl font-bold text-white mb-2" style={{ fontFamily: "'Press Start 2P', cursive" }}>
             SEASON 1
@@ -63,7 +93,8 @@ export const BattlePass: React.FC = () => {
 
       {/* Upgrade Call to action */}
       {!isPremium && (
-        <div className="bg-gradient-to-r from-[#9b8aff]/20 to-[#9b8aff]/5 border border-[#9b8aff]/30 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="bg-gradient-to-r from-[#9b8aff]/20 to-[#9b8aff]/5 border border-[#9b8aff]/30 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-4"
+             style={{ background: 'rgba(22, 22, 30, 0.60)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', position: 'relative', zIndex: 1 }}>
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-[#9b8aff]/20 rounded-full flex items-center justify-center text-[#9b8aff]">
               <Crown size={24} />
@@ -84,7 +115,8 @@ export const BattlePass: React.FC = () => {
       )}
 
       {/* Reward Track Header */}
-      <div className="grid grid-cols-12 gap-4 text-center font-bold tracking-widest text-[10px] md:text-xs text-gray-500 uppercase mt-8 mb-4">
+      <div className="grid grid-cols-12 gap-4 text-center font-bold tracking-widest text-[10px] md:text-xs text-gray-500 uppercase mt-8 mb-4 rounded-xl p-3"
+           style={{ background: 'rgba(22, 22, 30, 0.60)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', position: 'relative', zIndex: 1 }}>
         <div className="col-span-2 hidden md:block">Level</div>
         <div className="col-span-12 md:col-span-5 text-gray-300 bg-white/5 py-2 rounded-lg">Free Rewards</div>
         <div className="col-span-12 md:col-span-5 text-[#9b8aff] flex items-center justify-center gap-1 bg-[#9b8aff]/10 py-2 rounded-lg border border-[#9b8aff]/20">
@@ -100,10 +132,20 @@ export const BattlePass: React.FC = () => {
           const freeReward = SEASON_1.freeTracks.find(r => r.level === level);
           const premiumReward = SEASON_1.premiumTracks.find(r => r.level === level);
 
+          if (!freeReward && !premiumReward) return null;
+
           return (
             <div key={level} className={`grid grid-cols-12 gap-4 items-center bg-[#16161e] p-2 md:p-3 rounded-xl transition-all border ${
               isUnlocked ? 'border-transparent shadow-[0_4px_20px_rgba(0,0,0,0.5)]' : 'border-[#2a2a3a] opacity-50 bg-[#0e0e14]'
-            }`}>
+            }`}
+            style={{
+              background: 'rgba(22, 22, 30, 0.60)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255, 255, 255, 0.06)',
+              position: 'relative',
+              zIndex: 1
+            }}>
               
               {/* Level Indicator */}
               <div className="col-span-12 md:col-span-2 flex items-center md:justify-center justify-between mb-2 md:mb-0 px-2 md:px-0">
