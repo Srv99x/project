@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { GlassCard } from '../components/ui/GlassCard';
 import { Button } from '../components/ui/Button';
 import { Mic, MicOff, Volume2, VolumeX, Send, RefreshCw, MessageSquare, Sparkles } from 'lucide-react';
@@ -16,6 +17,7 @@ type UserInputSource = 'voice' | 'text';
 const VOICE_LANGUAGE_STORAGE_KEY = 'neuronex_voice_language';
 
 export const AvatarTutor: React.FC = () => {
+  const location = useLocation();
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -198,8 +200,9 @@ export const AvatarTutor: React.FC = () => {
     setInputText('');
     setIsProcessing(true);
 
-    // Call AI Service
-    const responseText = await chatWithTutor(newMessages, text);
+    // Call AI Service with route and optional quest context
+    const activeQuest = localStorage.getItem('active_quest') || undefined;
+    const responseText = await chatWithTutor(newMessages, text, location.pathname, activeQuest);
     
     setMessages(prev => [...prev, { role: 'model' as const, text: responseText }]);
     setIsProcessing(false);
@@ -243,6 +246,32 @@ export const AvatarTutor: React.FC = () => {
     <div className="h-[calc(100vh-8rem)] grid grid-cols-1 lg:grid-cols-12 gap-6">
       
       {/* Left Panel: Avatar & Visualizer (4 cols) */}
+      <GlassCard className="lg:col-span-4 flex flex-col items-center justify-between p-8 relative overflow-hidden bg-gradient-to-b from-surface/50 to-black/50">
+         {/* Status Indicator */}
+         <div className="absolute top-6 left-6 flex items-center gap-2">
+            <div className={`w-2 h-2 rounded-full ${isProcessing ? 'bg-white animate-pulse' : isListening ? 'bg-primary animate-pulse' : isSpeaking ? 'bg-secondary' : 'bg-subtext/30'}`}></div>
+            <span className="text-xs font-mono uppercase text-subtext">
+                {isProcessing ? 'Thinking...' : isListening ? 'Listening...' : isSpeaking ? 'Speaking...' : 'Ready'}
+            </span>
+         </div>
+
+         <div className="absolute top-6 right-6 flex items-center gap-4 z-50">
+             <div className="flex items-center gap-2">
+                <label className="text-[10px] uppercase tracking-wide text-subtext hidden sm:block">Voice</label>
+                <select
+                  value={selectedVoiceLanguage}
+                  onChange={(e) => setSelectedVoiceLanguage(e.target.value)}
+                  className="bg-white/5 border border-white/10 rounded-sm px-2 py-1 text-xs text-white focus:outline-none focus:border-primary/60"
+                >
+                  {(voiceLanguageOptions.length > 0 ? voiceLanguageOptions : [{ id: 'fallback-en', label: 'English (US)', lang: 'en-US' }]).map((option) => (
+                    <option key={option.id} value={option.lang}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+             </div>
+
+             <button onClick={() => setIsMuted(!isMuted)} className="text-subtext hover:text-white transition-colors" title="Toggle Voice Output">
       <GlassCard className="lg:col-span-4 flex flex-col items-center justify-start p-8 relative overflow-hidden bg-gradient-to-b from-surface/50 to-black/50">
          <div className="absolute top-6 right-6">
              <button onClick={() => setIsMuted(!isMuted)} className="text-subtext hover:text-white transition-colors">

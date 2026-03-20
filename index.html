@@ -11,12 +11,13 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #040406;
+      background-color: #070A10;
       background-image:
-        radial-gradient(circle at -12% 50%, rgba(176, 134, 62, 0.16) 0%, rgba(176, 134, 62, 0) 34%),
-        radial-gradient(circle at 112% 50%, rgba(176, 134, 62, 0.16) 0%, rgba(176, 134, 62, 0) 34%),
-        radial-gradient(circle at 50% -30%, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0) 45%);
-      color: #e9e9eb;
+        radial-gradient(circle at -12% 50%, rgba(0, 240, 255, 0.06) 0%, transparent 38%),
+        radial-gradient(circle at 112% 50%, rgba(176, 38, 255, 0.06) 0%, transparent 38%),
+        radial-gradient(circle at 50% -20%, rgba(0, 240, 255, 0.04) 0%, transparent 45%);
+      color: #E2E8F0;
+      position: relative;
     }
 
     .font-mono {
@@ -60,18 +61,59 @@
     }
 
     .glass-panel {
-      background:
-        linear-gradient(165deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.01)),
-        linear-gradient(180deg, rgba(194, 150, 62, 0.045), rgba(194, 150, 62, 0));
+      background: rgba(17, 21, 32, 0.85);
       box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.2),
-        inset 0 0 0 1px rgba(194, 150, 62, 0.12),
-        0 0 0 1px rgba(194, 150, 62, 0.11),
-        0 16px 36px rgba(0, 0, 0, 0.48),
-        0 0 10px rgba(194, 150, 62, 0.1);
+        inset 0 1px 0 rgba(0, 240, 255, 0.06),
+        0 0 0 1px rgba(0, 240, 255, 0.08),
+        0 16px 36px rgba(0, 0, 0, 0.55),
+        0 0 20px rgba(0, 240, 255, 0.04);
       backdrop-filter: blur(24px) saturate(165%);
       -webkit-backdrop-filter: blur(24px) saturate(165%);
-      border: 1px solid rgba(194, 150, 62, 0.3);
+      border: 1px solid rgba(0, 240, 255, 0.12);
+    }
+
+    /* Primary cyber action button */
+    .cyber-button {
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid rgba(0, 240, 255, 0.45);
+      color: #00F0FF;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+    .cyber-button:hover {
+      background: rgba(0, 240, 255, 0.18);
+      box-shadow: 0 0 18px rgba(0, 240, 255, 0.35);
+    }
+
+    /* Secondary / warning button */
+    .cyber-button-warning {
+      background: rgba(255, 51, 102, 0.08);
+      border: 1px solid rgba(255, 51, 102, 0.45);
+      color: #FF3366;
+    }
+    .cyber-button-warning:hover {
+      background: rgba(255, 51, 102, 0.18);
+      box-shadow: 0 0 18px rgba(255, 51, 102, 0.35);
+    }
+
+    /* Subtle blueprint grid overlay on body */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(0, 240, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.025) 1px, transparent 1px);
+      background-size: 30px 30px;
     }
 
     /* Form controls readability on dark glass surfaces */
@@ -212,13 +254,26 @@
       theme: {
         extend: {
           colors: {
-            background: '#040406',
-            surface: '#0D0F14',
-            primary: '#C2963E',
-            secondary: '#8A6A2A',
-            subtext: '#A1A3AA',
+            /* ── Core backgrounds ── */
+            background: '#070A10',
+            surface: '#111520',
+
+            /* ── Cyberpunk accents ── */
+            primary: '#00F0FF',      /* Neon Cyan */
+            secondary: '#B026FF',    /* Neon Purple */
+            hacker: '#00FF41',       /* Matrix Green */
+            warning: '#FF3366',      /* Neon Pink/Red */
+
+            /* ── Text ── */
+            maintext: '#E2E8F0',
+            subtext: '#8B9BB4',
+
+            /* ── Legacy aliases (keeps existing components working) ── */
             success: '#7FB98A',
             error: '#D46A5F'
+          },
+          backgroundImage: {
+            'cyber-gradient': 'linear-gradient(to right bottom, rgba(0,240,255,0.08), rgba(176,38,255,0.08))'
           }
         }
       }

@@ -7,6 +7,7 @@ import 'prismjs/components/prism-typescript';
 import { GlassCard } from '../components/ui/GlassCard';
 import { Button } from '../components/ui/Button';
 import { SAMPLE_CODE_PYTHON, SAMPLE_CODE_JS, SAMPLE_CODE_TS } from '../constants';
+import { BossFightHUD, BossFightResult } from '../components/BossFightHUD';
 import { Play, Bug, Zap, BookOpen, GitGraph, FileCode, Terminal as TerminalIcon, X, Sparkles } from 'lucide-react';
 import { debugCode, optimizeCode, explainCode } from '../services/aiService';
 import { runCode } from '../services/codeRunnerService';
@@ -153,6 +154,10 @@ export const CodingGround: React.FC = () => {
         return window.innerWidth >= 1024;
     });
 
+    // ── Boss Fight state ──
+    const [bossFightActive, setBossFightActive] = useState(false);
+    const [bossFightResult, setBossFightResult] = useState<BossFightResult | null>(null);
+
     const workbenchRef = useRef<HTMLDivElement>(null);
     const terminalOutputRef = useRef<HTMLDivElement>(null);
     const editorTextareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -213,6 +218,12 @@ export const CodingGround: React.FC = () => {
                 setStatusMessage('Running code...');
                 result = await runCode(code, language);
                 setOutput(result);
+                // Feed run result into Boss Fight HUD
+                if (bossFightActive) {
+                  const hasError = /error|exception|traceback|syntaxerror/i.test(result);
+                  const passed   = !hasError && result.trim().length > 0;
+                  setBossFightResult({ passed, hasError });
+                }
                 break;
             case 'debug':
                 setStatusMessage('Analyzing code for bugs...');
@@ -365,6 +376,14 @@ export const CodingGround: React.FC = () => {
 
   return (
     <div className="h-[calc(100vh-8rem)] flex flex-col gap-4">
+      {/* Boss Fight HUD — rendered above the toolbar */}
+      <BossFightHUD
+        lastRunResult={bossFightResult}
+        isActive={bossFightActive}
+        onBossFightStart={() => setBossFightActive(true)}
+        onBossFightEnd={() => { setBossFightActive(false); setBossFightResult(null); }}
+      />
+
       {/* Header / Toolbar */}
     <div className="flex justify-between items-center bg-surface border border-white/5 p-3 rounded-sm transition-all hover:border-primary/35 hover:shadow-[0_0_10px_rgba(194,150,62,0.12)]">
         <div className="flex items-center gap-4">

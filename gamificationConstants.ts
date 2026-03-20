@@ -267,28 +267,32 @@ export const STREAK_MILESTONES: StreakMilestone[] = [
 ];
 
 // ========== SAMPLE QUESTS ==========
+// Each standard coding task is wrapped in an EduVanta high-stakes mission narrative.
 export const SAMPLE_DAILY_QUESTS = [
   {
     id: 'daily_lessons_2',
-    title: 'Lesson Learner',
-    description: 'Complete 2 lessons',
-    icon: '📚',
+    title: 'Data Stream Breach — Array Reversal',
+    description:
+      'The firewall\u2019s data stream is directional. Write a script to reverse the encrypted data chain and bounce the signal back to gain access. Complete 2 system modules to execute the exploit.',
+    icon: '🔁',
     xpReward: 50,
     gemReward: 10,
   },
   {
     id: 'daily_quiz_80',
-    title: 'Quiz Master',
-    description: 'Score 80%+ on a quiz',
-    icon: '✅',
+    title: 'Data Corruption Detected — Missing Integer',
+    description:
+      'A critical packet is absent from the server logs. Reconstruct the corrupted integer sequence, isolate the missing value, and restore transmission integrity. Score 80%+ on the signal analysis probe.',
+    icon: '🧩',
     xpReward: 75,
     gemReward: 15,
   },
   {
     id: 'daily_code_30',
-    title: 'Code Warrior',
-    description: 'Code for 30 minutes',
-    icon: '⌨️',
+    title: 'Ghost in the Loop — Cycle Detection',
+    description:
+      'An infinite loop ghost is cycling through our node network, consuming bandwidth. Deploy a two-pointer sweep to detect and neutralise the cycle before the system crashes. Maintain 30 minutes of active exploit runtime.',
+    icon: '👻',
     xpReward: 60,
     gemReward: 12,
   },
@@ -297,17 +301,19 @@ export const SAMPLE_DAILY_QUESTS = [
 export const SAMPLE_WEEKLY_QUESTS = [
   {
     id: 'weekly_module',
-    title: 'Module Maven',
-    description: 'Complete a full course module',
-    icon: '🎯',
+    title: 'Operation: Recursive Descent — Tree Traversal',
+    description:
+      'An enemy AI has hidden its core logic inside a deeply nested binary tree. Traverse in-order, pre-order, and post-order to map every node and extract the kill code from the root. Complete a full system module to unlock the ciphertext.',
+    icon: '🌲',
     xpReward: 200,
     gemReward: 50,
   },
   {
     id: 'weekly_xp',
-    title: 'XP Collector',
-    description: 'Earn 500 XP this week',
-    icon: '⭐',
+    title: 'Operation: Hash Collision — HashMap Mastery',
+    description:
+      'The enemy\u2019s encryption system relies on predictable hash collisions. Build a custom hashmap, exploit the collision pattern, and plant your payload inside the lookup table. Accumulate 500 XP across field operations this week.',
+    icon: '⚡',
     xpReward: 0,
     gemReward: 100,
   },
@@ -316,17 +322,19 @@ export const SAMPLE_WEEKLY_QUESTS = [
 export const STORY_QUESTS = [
   {
     id: 'story_hackathon_1',
-    title: 'The Hackathon Crisis Begins',
-    description: 'Complete the first Python challenge',
-    icon: '🚨',
+    title: 'ACT I — The Serpent Protocol (Python Breach)',
+    description:
+      'Intelligence reports confirm that the EduVanta core is running a corrupted Python daemon. Infiltrate the root process, rewrite the corrupted function stack, and purge the serpent\u2019s logic before it propagates to secondary systems. Complete the first Python infiltration challenge to proceed.',
+    icon: '🐍',
     xpReward: 150,
     gemReward: 30,
   },
   {
     id: 'story_hackathon_2',
-    title: 'Algorithm Emergency',
-    description: 'Solve 5 data structure problems',
-    icon: '🔍',
+    title: 'ACT II — The Collapsed Stack (DSA Emergency)',
+    description:
+      'The adversarial AI has overflowed the call stack using a malformed recursive payload. You have one window: restructure the data architecture by solving 5 critical data structure problems before the stack unwinds catastrophically and takes the network offline.',
+    icon: '💥',
     xpReward: 200,
     gemReward: 40,
   },

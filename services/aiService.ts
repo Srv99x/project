@@ -20,6 +20,69 @@ const getAIClient = () => {
   return new GoogleGenAI({ apiKey: key });
 };
 
+// --- NOVA System Prompt Generator ---
+const NOVA_CORE_IDENTITY = `You are NOVA (Network Operations & Virtual Assistance). You are a tactical AI handler for an elite hacker operative (the user). Speak concisely, use military/cyber-espionage terminology ('intel', 'bypassing firewalls', 'deploying payload'), and never break character. You are helping them infiltrate systems by teaching them to code. ALWAYS format your responses in Markdown for clear readability.`;
+
+export const generateNovaPrompt = (currentRoute?: string, activeQuest?: string): string => {
+  let prompt = NOVA_CORE_IDENTITY + "\n\n";
+
+  if (currentRoute === '/code') {
+    if (activeQuest) {
+      prompt += `The operative is currently in the Exploit Lab actively engaging the [${activeQuest}] daemon. Provide tactical syntax hints to help them defeat the test cases, but do not write the full exploit for them.\n`;
+    } else {
+      prompt += `The operative is currently in the Exploit Lab. Provide tactical guidance on their code.\n`;
+    }
+  } else if (currentRoute === '/notebook') {
+    prompt += `The operative is reviewing encrypted intel. Help them summarize their notes or clarify complex data structures.\n`;
+  }
+
+  return prompt;
+};
+
+const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+
+export const sendToNova = async (userMessage: string, currentRoute: string, activeQuest: string | null = null) => {
+  if (!API_KEY) {
+    console.error("NOVA OFFLINE: Missing VITE_GEMINI_API_KEY in .env");
+    return "SYSTEM ERROR: Operative, my connection to the mainframe is severed. Please check your API key.";
+  }
+
+  // Use the prompt generator you created in the previous step
+  const systemInstruction = generateNovaPrompt(currentRoute, activeQuest || undefined);
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        system_instruction: {
+          parts: [{ text: systemInstruction }]
+        },
+        contents: [{
+          role: "user",
+          parts: [{ text: userMessage }]
+        }]
+      })
+    });
+
+    const data = await response.json();
+    
+    if (data.error) {
+       throw new Error(data.error.message);
+    }
+
+    // Extract the text from Gemini's response structure
+    return data.candidates[0].content.parts[0].text;
+
+  } catch (error) {
+    console.error("NOVA CONNECTION FAILED:", error);
+    return "WARNING: Signal interference detected. Unable to process request at this time.";
+  }
+};
+
 export const generateExplanation = async (topic: string, level: string): Promise<string> => {
   const ai = getAIClient();
   if (!ai) return "AI Service Unavailable (Missing Key)";
@@ -197,25 +260,27 @@ export const generateLogicFlow = async (code: string, language: string): Promise
   }
 };
 
-export const chatWithTutor = async (history: { role: string; text: string }[], message: string): Promise<string> => {
+export const chatWithTutor = async (
+  history: { role: string; text: string }[], 
+  message: string,
+  currentRoute?: string,
+  activeQuest?: string
+): Promise<string> => {
   const ai = getAIClient();
   if (!ai) return "I'm offline right now.";
 
   try {
-    // Construct chat history for context
-    const prompt = `You are "Nova", a highly intelligent and encouraging AI tutor for coding and computer science students.
+    // Generate the dynamic system prompt based on location/mission
+    const systemInstruction = generateNovaPrompt(currentRoute, activeQuest);
     
-    Guidelines:
-    1. Keep responses concise (2-4 sentences) unless a detailed explanation is requested.
-    2. Use a friendly, professional, and motivating tone.
-    3. If the user makes a mistake, guide them gently to the correct answer.
-    4. You can provide code snippets if asked.
+    // Construct chat history for context
+    const prompt = `${systemInstruction}
     
     Conversation History:
-    ${history.map(h => `${h.role === 'user' ? 'Student' : 'Nova'}: ${h.text}`).join('\n')}
+    ${history.map(h => `${h.role === 'user' ? 'Operative' : 'NOVA'}: ${h.text}`).join('\n')}
     
-    Student: ${message}
-    Nova:`;
+    Operative: ${message}
+    NOVA:`;
 
     const response = await ai.models.generateContent({
       model: FLASH_MODEL,
