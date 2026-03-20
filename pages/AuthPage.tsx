@@ -69,8 +69,7 @@ export const AuthPage: React.FC = () => {
     console.log('Sign In:', { email: siEmail, password: siPassword });
     localStorage.setItem('eduq_user', JSON.stringify({ email: siEmail, name: siEmail.split('@')[0] }));
     setShowSuccess(true);
-    window.dispatchEvent(new HashChangeEvent('hashchange'));
-    setTimeout(() => window.location.replace('/#/'), 100);
+    setTimeout(() => window.location.reload(), 600);
   };
 
   const handleSignUp = (e: React.FormEvent) => {
@@ -86,8 +85,7 @@ export const AuthPage: React.FC = () => {
     console.log('Sign Up:', { name: suName, email: suEmail, password: suPassword });
     localStorage.setItem('eduq_user', JSON.stringify({ name: suName, email: suEmail }));
     setShowSuccess(true);
-    window.dispatchEvent(new HashChangeEvent('hashchange'));
-    setTimeout(() => window.location.replace('/#/'), 100);
+    setTimeout(() => window.location.reload(), 600);
   };
 
   /* ── Slide animation direction ── */
