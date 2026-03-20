@@ -270,28 +270,9 @@ export const AvatarTutor: React.FC = () => {
                   ))}
                 </select>
              </div>
-
-             <button onClick={() => setIsMuted(!isMuted)} className="text-subtext hover:text-white transition-colors" title="Toggle Voice Output">
-      <GlassCard className="lg:col-span-4 flex flex-col items-center justify-start p-8 relative overflow-hidden bg-gradient-to-b from-surface/50 to-black/50">
-         <div className="absolute top-6 right-6">
              <button onClick={() => setIsMuted(!isMuted)} className="text-subtext hover:text-white transition-colors">
                 {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
              </button>
-         </div>
-
-         <div className="absolute top-6 left-6 flex items-center gap-2 z-50">
-            <label className="text-[10px] uppercase tracking-wide text-subtext">Voice</label>
-            <select
-              value={selectedVoiceLanguage}
-              onChange={(e) => setSelectedVoiceLanguage(e.target.value)}
-              className="bg-white/5 hover:bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-primary/80 focus:ring-2 focus:ring-primary/30 cursor-pointer transition-all"
-            >
-              {(voiceLanguageOptions.length > 0 ? voiceLanguageOptions : [{ id: 'fallback-en', label: 'English (US)', lang: 'en-US' }]).map((option) => (
-                <option key={option.id} value={option.lang}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
          </div>
 
         {/* Central Avatar Visual */}

@@ -161,6 +161,7 @@ export const CodingGround: React.FC = () => {
     const workbenchRef = useRef<HTMLDivElement>(null);
     const terminalOutputRef = useRef<HTMLDivElement>(null);
     const editorTextareaRef = useRef<HTMLTextAreaElement | null>(null);
+    const lineNumberGutterRef = useRef<HTMLDivElement | null>(null);
 
     const prismLanguageMap: Record<Language, string> = {
         python: 'python',
@@ -287,6 +288,18 @@ export const CodingGround: React.FC = () => {
         textarea.style.margin = '0';
         textarea.style.fontFamily = 'JetBrains Mono, monospace';
 
+        const pre = textarea.parentElement?.querySelector('.editor-pre') as HTMLElement | null;
+
+        const syncEditorScroll = () => {
+            if (lineNumberGutterRef.current) {
+                lineNumberGutterRef.current.scrollTop = textarea.scrollTop;
+            }
+            if (pre) {
+                pre.scrollTop = textarea.scrollTop;
+                pre.scrollLeft = textarea.scrollLeft;
+            }
+        };
+
         const updateActiveLine = () => {
             const cursorPos = textarea.selectionStart || 0;
             const currentLine = textarea.value.slice(0, cursorPos).split('\n').length;
@@ -294,21 +307,24 @@ export const CodingGround: React.FC = () => {
         };
 
         updateActiveLine();
+        syncEditorScroll();
         textarea.addEventListener('keyup', updateActiveLine);
         textarea.addEventListener('click', updateActiveLine);
         textarea.addEventListener('input', updateActiveLine);
         textarea.addEventListener('select', updateActiveLine);
+        textarea.addEventListener('scroll', syncEditorScroll);
 
         return () => {
             textarea.removeEventListener('keyup', updateActiveLine);
             textarea.removeEventListener('click', updateActiveLine);
             textarea.removeEventListener('input', updateActiveLine);
             textarea.removeEventListener('select', updateActiveLine);
+            textarea.removeEventListener('scroll', syncEditorScroll);
             if (editorTextareaRef.current === textarea) {
                 editorTextareaRef.current = null;
             }
         };
-    }, [code, language]);
+    }, [language]);
 
     useEffect(() => {
         const textarea = editorTextareaRef.current;
@@ -427,7 +443,8 @@ export const CodingGround: React.FC = () => {
                 <div className="flex flex-1 overflow-hidden bg-[#0B0B0F]">
                     {/* Line Numbers - Inside Editor */}
                     <div
-                        className="bg-[#0B0B0F] text-subtext/50 text-right pr-4 text-[13px] font-mono select-none flex-shrink-0"
+                        ref={lineNumberGutterRef}
+                        className="bg-[#0B0B0F] text-subtext/50 text-right pr-4 text-[13px] font-mono select-none flex-shrink-0 overflow-hidden"
                         style={{
                             padding: '16px 8px',
                             lineHeight: '24px',
@@ -438,7 +455,7 @@ export const CodingGround: React.FC = () => {
                         {lineNumbers.map(num => (
                             <div
                                 key={num}
-                                className={`${num === activeLine ? 'text-primary' : ''}`}
+                                className={`${num === activeLine ? 'text-gray-200' : ''}`}
                                 style={{
                                     height: '24px',
                                     lineHeight: '24px',

@@ -181,6 +181,8 @@
       border: none !important;
       height: 100% !important;
       width: 100% !important;
+      overflow: auto !important;
+      overflow-wrap: normal !important;
     }
 
     .editor-pre {
@@ -188,7 +190,12 @@
       color: #e5e7eb !important;
       background: transparent !important;
       flex: 1 !important;
-      overflow: hidden !important;
+      overflow: auto !important;
+      scrollbar-width: none !important;
+    }
+
+    .editor-pre::-webkit-scrollbar {
+      display: none !important;
     }
 
     .editor-line {
@@ -200,18 +207,18 @@
     }
 
     .editor-line-active {
-      background: rgba(194, 150, 62, 0.13) !important;
+      background: rgba(148, 163, 184, 0.12) !important;
     }
 
     .token.comment,
     .token.prolog,
     .token.doctype,
     .token.cdata {
-      color: #6b7280;
+      color: #6a737d;
     }
 
     .token.punctuation {
-      color: #9ca3af;
+      color: #9aa4b2;
     }
 
     .token.keyword,
@@ -219,34 +226,34 @@
     .token.selector,
     .token.important,
     .token.tag {
-      color: #f59e0b;
+      color: #c792ea;
     }
 
     .token.function,
     .token.class-name,
     .token.property,
     .token.builtin {
-      color: #60a5fa;
+      color: #82aaff;
     }
 
     .token.string,
     .token.attr-value,
     .token.regex {
-      color: #34d399;
+      color: #c3e88d;
     }
 
     .token.number,
     .token.boolean,
     .token.constant,
     .token.symbol {
-      color: #f472b6;
+      color: #f78c6c;
     }
 
     .token.operator,
     .token.entity,
     .token.url,
     .token.variable {
-      color: #e5e7eb;
+      color: #d6deeb;
     }
   </style>
   <script>

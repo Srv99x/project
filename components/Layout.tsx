@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { MOCK_USER } from '../constants';
-import { Bell, Search, Menu, Trophy, TrendingUp, Trees, Sparkles } from 'lucide-react';
+import { Bell, Search, Menu, Trophy, TrendingUp, Sparkles } from 'lucide-react';
 import { User } from '../types';
 
 interface LayoutProps {
@@ -18,7 +18,6 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const topNavItems = [
     { icon: Trophy, label: 'Achievements', path: '/achievements' },
     { icon: TrendingUp, label: 'Leaderboard', path: '/leaderboard' },
-    { icon: Trees, label: 'Skill Tree', path: '/skill-tree' },
     { icon: Sparkles, label: 'Shop', path: '/shop' },
   ];
   
@@ -63,7 +62,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-background/65 backdrop-blur-xl border-b border-primary/20 h-16 flex items-center justify-between px-8">
+      <header className="sticky top-0 z-40 bg-background/65 backdrop-blur-xl border-b border-white/10 h-16 flex items-center justify-between px-8">
         <div className="flex items-center gap-4">
           {!sidebarOpen && (
             <button 
@@ -74,7 +73,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <Menu size={20} />
             </button>
           )}
-          <div className="flex items-center glass-panel border border-primary/25 rounded-xl px-4 py-1.5 w-96 focus-within:border-primary/55 focus-within:shadow-[0_0_12px_rgba(176,122,76,0.16)] transition-all">
+          <div className="flex items-center glass-panel border border-white/15 rounded-xl px-4 py-1.5 w-96 focus-within:border-white/30 transition-all">
             <Search size={16} className="text-subtext mr-3" />
             <input 
               type="text" 
@@ -95,7 +94,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                   onClick={() => navigate(item.path)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all group border ${
                     isActive
-                      ? 'bg-white/10 text-primary border-primary/50 shadow-[0_0_12px_rgba(176,122,76,0.16)]'
+                      ? 'bg-white/10 text-white border-white/30'
                       : 'bg-white/5 text-subtext border-white/10 hover:text-white hover:border-white/20 hover:bg-white/8'
                   }`}
                   title={item.label}
@@ -113,18 +112,18 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 className="relative p-1 rounded-full hover:bg-white/5 transition-colors focus:outline-none"
             >
                 <Bell size={20} className="text-subtext hover:text-white cursor-pointer transition-colors" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full"></span>
+                <span className="absolute top-1 right-1 w-2 h-2 bg-white/80 rounded-full"></span>
             </button>
             
             {showNotifications && (
-              <div className="absolute right-0 top-full mt-2 w-64 glass-panel border border-primary/25 rounded-xl shadow-xl p-4 animate-fade-in z-50">
+              <div className="absolute right-0 top-full mt-2 w-64 glass-panel border border-white/15 rounded-xl shadow-xl p-4 animate-fade-in z-50">
                     <h4 className="text-sm font-bold mb-2">Notifications</h4>
                     <div className="space-y-2">
-                        <div className="text-xs p-2 bg-white/5 rounded border-l-2 border-primary">
+                        <div className="text-xs p-2 bg-white/5 rounded border-l-2 border-white/25">
                             <p className="font-semibold">Streak Saver!</p>
                             <p className="text-subtext">You reached a {user.streak}-day streak.</p>
                         </div>
-                         <div className="text-xs p-2 bg-white/5 rounded border-l-2 border-secondary">
+                         <div className="text-xs p-2 bg-white/5 rounded border-l-2 border-white/15">
                             <p className="font-semibold">New Assignment</p>
                             <p className="text-subtext">Python lists quiz available.</p>
                         </div>
@@ -136,11 +135,11 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="flex items-center gap-3 pl-6 border-l border-white/10">
             <div className="text-right hidden md:block">
               <p className="text-sm font-medium text-white">{user.name}</p>
-              <p className="text-xs text-primary font-mono">{user.role} MEMBER</p>
+              <p className="text-xs text-subtext font-mono">{user.role} MEMBER</p>
             </div>
             
             <div 
-                className="w-9 h-9 rounded-full bg-gradient-to-tr from-primary to-secondary p-[1px] cursor-pointer hover:scale-105 transition-transform" 
+              className="w-9 h-9 rounded-full bg-white/20 p-[1px] cursor-pointer hover:scale-105 transition-transform" 
                 onClick={() => navigate('/settings')}
             >
               <div className="w-full h-full rounded-full bg-surface flex items-center justify-center overflow-hidden">

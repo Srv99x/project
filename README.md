@@ -117,6 +117,41 @@ Request format sent by backend:
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 
+## Deploy To Vercel
+
+This repo is configured for a full Vercel deploy:
+- Frontend (Vite React) is built from `package.json`
+- Backend (FastAPI) is served from `backend/main.py`
+- API routes are available under `/api/*`
+
+### 1. Import project into Vercel
+
+1. Open Vercel dashboard and import this repository.
+2. Keep root directory as project root.
+3. Framework can remain auto-detected.
+
+### 2. Set environment variables in Vercel
+
+Frontend variables:
+- `VITE_GEMINI_API_KEY`
+- `VITE_GEMINI_FLASH_MODEL` (optional, default `gemini-2.5-flash`)
+- `VITE_GEMINI_PRO_MODEL` (optional, default `gemini-2.5-pro`)
+- `VITE_API_BASE_URL` (optional; leave empty to use same-origin `/api`)
+
+Backend variables:
+- `ONLINECOMPILER_API_KEY` (required for code execution)
+- `ONLINECOMPILER_API_URL` (optional, default already set in backend)
+- `CODE_EXEC_TIMEOUT` (optional, e.g. `15`)
+- `FRONTEND_ORIGINS` (optional; can include your Vercel domains if needed)
+
+### 3. Deploy
+
+Trigger deploy from Vercel UI.
+
+Notes:
+- `vercel.json` contains routing for SPA pages and `/api/*` FastAPI handlers.
+- Python dependencies are installed from `backend/requirements.txt`.
+
 ## Project Structure
 
 ```
