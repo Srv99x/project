@@ -69,7 +69,8 @@ export const AuthPage: React.FC = () => {
     console.log('Sign In:', { email: siEmail, password: siPassword });
     localStorage.setItem('eduq_user', JSON.stringify({ email: siEmail, name: siEmail.split('@')[0] }));
     setShowSuccess(true);
-    setTimeout(() => { window.location.href = '/#/'; }, 800);
+    window.dispatchEvent(new HashChangeEvent('hashchange'));
+    setTimeout(() => window.location.replace('/#/'), 100);
   };
 
   const handleSignUp = (e: React.FormEvent) => {
@@ -85,7 +86,8 @@ export const AuthPage: React.FC = () => {
     console.log('Sign Up:', { name: suName, email: suEmail, password: suPassword });
     localStorage.setItem('eduq_user', JSON.stringify({ name: suName, email: suEmail }));
     setShowSuccess(true);
-    setTimeout(() => navigate('/'), 800);
+    window.dispatchEvent(new HashChangeEvent('hashchange'));
+    setTimeout(() => window.location.replace('/#/'), 100);
   };
 
   /* ── Slide animation direction ── */
@@ -167,6 +169,7 @@ export const AuthPage: React.FC = () => {
       <div className="auth-right">
         <motion.div
           className="auth-card"
+          style={{ overflowY: 'auto', maxHeight: '90vh' }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
@@ -188,7 +191,7 @@ export const AuthPage: React.FC = () => {
           </div>
 
           {/* Form area */}
-          <AnimatePresence mode="wait" custom={direction}>
+          <AnimatePresence mode="wait" initial={false} custom={direction}>
             {tab === 'signin' ? (
               <motion.form
                 key="signin"
@@ -198,14 +201,14 @@ export const AuthPage: React.FC = () => {
                 initial="enter"
                 animate="center"
                 exit="exit"
-                transition={{ duration: 0.25 }}
+                transition={{ duration: 0.1 }}
                 onSubmit={handleSignIn}
               >
-                {renderField('Email Address', siEmail, setSiEmail, siErrors.email, {
+                {renderField('Email Address', siEmail, (v) => { setSiEmail(v); if (siErrors.email) setSiErrors(p => ({ ...p, email: '' })); }, siErrors.email, {
                   type: 'email',
                   placeholder: 'operative@eduq.net',
                 })}
-                {renderField('Password', siPassword, setSiPassword, siErrors.password, {
+                {renderField('Password', siPassword, (v) => { setSiPassword(v); if (siErrors.password) setSiErrors(p => ({ ...p, password: '' })); }, siErrors.password, {
                   type: siShowPw ? 'text' : 'password',
                   placeholder: '••••••••',
                   showPw: siShowPw,
@@ -237,17 +240,17 @@ export const AuthPage: React.FC = () => {
                 initial="enter"
                 animate="center"
                 exit="exit"
-                transition={{ duration: 0.25 }}
+                transition={{ duration: 0.1 }}
                 onSubmit={handleSignUp}
               >
-                {renderField('Operative Name', suName, setSuName, suErrors.name, {
+                {renderField('Operative Name', suName, (v) => { setSuName(v); if (suErrors.name) setSuErrors(p => ({ ...p, name: '' })); }, suErrors.name, {
                   placeholder: 'ShadowByte_42',
                 })}
-                {renderField('Email Address', suEmail, setSuEmail, suErrors.email, {
+                {renderField('Email Address', suEmail, (v) => { setSuEmail(v); if (suErrors.email) setSuErrors(p => ({ ...p, email: '' })); }, suErrors.email, {
                   type: 'email',
                   placeholder: 'operative@eduq.net',
                 })}
-                {renderField('Password', suPassword, setSuPassword, suErrors.password, {
+                {renderField('Password', suPassword, (v) => { setSuPassword(v); if (suErrors.password) setSuErrors(p => ({ ...p, password: '' })); }, suErrors.password, {
                   type: suShowPw ? 'text' : 'password',
                   placeholder: '••••••••',
                   showPw: suShowPw,
@@ -264,7 +267,7 @@ export const AuthPage: React.FC = () => {
                   ))}
                 </div>
 
-                {renderField('Confirm Password', suConfirm, setSuConfirm, suErrors.confirm, {
+                {renderField('Confirm Password', suConfirm, (v) => { setSuConfirm(v); if (suErrors.confirm) setSuErrors(p => ({ ...p, confirm: '' })); }, suErrors.confirm, {
                   type: suShowConfirm ? 'text' : 'password',
                   placeholder: '••••••••',
                   showPw: suShowConfirm,
