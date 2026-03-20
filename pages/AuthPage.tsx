@@ -67,9 +67,9 @@ export const AuthPage: React.FC = () => {
     if (Object.keys(errors).length > 0) return;
 
     console.log('Sign In:', { email: siEmail, password: siPassword });
-    localStorage.setItem('eduq_user', JSON.stringify({ email: siEmail }));
+    localStorage.setItem('eduq_user', JSON.stringify({ email: siEmail, name: siEmail.split('@')[0] }));
     setShowSuccess(true);
-    setTimeout(() => navigate('/'), 800);
+    setTimeout(() => { window.location.href = '/#/'; }, 800);
   };
 
   const handleSignUp = (e: React.FormEvent) => {

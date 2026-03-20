@@ -147,7 +147,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     <img src={user.avatar} alt="Profile" className="w-full h-full object-cover" />
                 ) : (
                     <span className="font-bold text-sm text-white">
-                        {user.name.split(' ').map(n => n[0]).join('').substring(0,2)}
+                        {(user.name?.split(' ') ?? ['O']).map(n => n[0]).join('').substring(0,2)}
                     </span>
                 )}
               </div>
