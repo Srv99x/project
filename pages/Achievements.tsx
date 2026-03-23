@@ -60,6 +60,12 @@ export const Achievements: React.FC = () => {
         <div className="text-right">
           <p className="text-3xl font-bold text-primary">{totalEarned}/{totalAvailable}</p>
           <p className="text-sm text-subtext">Badges Earned</p>
+          <div className="w-full bg-white/10 rounded-full h-2 mt-2 overflow-hidden">
+            <div 
+              className="bg-primary h-full rounded-full transition-all duration-1000 ease-out" 
+              style={{ width: `${totalAvailable > 0 ? (totalEarned / totalAvailable) * 100 : 0}%` }}
+            />
+          </div>
         </div>
       </div>
 
